@@ -1,8 +1,8 @@
 import pickle
 from keras.preprocessing import image
 from vgg16 import VGG16
-import numpy as np 
-from keras.applications.imagenet_utils import preprocess_input  
+import numpy as np
+from keras.applications.imagenet_utils import preprocess_input
 
 counter = 0
 
@@ -16,7 +16,7 @@ def load_image(path):
 
 
 def load_encoding_model():
-    model = VGG16(weights='imagenet', include_top=True, input_shape = (224, 224, 3))
+    model = VGG16(weights='imagenet', include_top=True, input_shape=(224, 224, 3))
     return model
 
 
@@ -32,18 +32,20 @@ def get_encoding(model, img):
 
 
 def prepare_dataset(no_imgs=-1):
-    f_train_images = open('Flickr8k_text/Flickr_8k.trainImages.txt','rb')
-    train_imgs = f_train_images.read().strip().split('\n') if no_imgs == -1 else f_train_images.read().strip().split('\n')[:no_imgs]
+    f_train_images = open('Flickr8k_text/Flickr_8k.trainImages.txt', 'rb')
+    train_imgs = f_train_images.read().strip().split('\n') if no_imgs == -1 else\
+        f_train_images.read().strip().split('\n')[:no_imgs]
     f_train_images.close()
 
-    f_test_images = open('Flickr8k_text/Flickr_8k.testImages.txt','rb')
-    test_imgs = f_test_images.read().strip().split('\n') if no_imgs == -1 else f_test_images.read().strip().split('\n')[:no_imgs]
+    f_test_images = open('Flickr8k_text/Flickr_8k.testImages.txt', 'rb')
+    test_imgs = f_test_images.read().strip().split('\n') if no_imgs == -1 else\
+        f_test_images.read().strip().split('\n')[:no_imgs]
     f_test_images.close()
 
-    f_train_dataset = open('Flickr8k_text/flickr_8k_train_dataset.txt','wb')
+    f_train_dataset = open('Flickr8k_text/flickr_8k_train_dataset.txt', 'wb')
     f_train_dataset.write("image_id\tcaptions\n")
 
-    f_test_dataset = open('Flickr8k_text/flickr_8k_test_dataset.txt','wb')
+    f_test_dataset = open('Flickr8k_text/flickr_8k_test_dataset.txt', 'wb')
     f_test_dataset.write("image_id\tcaptions\n")
 
     f_captions = open('Flickr8k_text/Flickr8k.token.txt', 'rb')
@@ -80,8 +82,8 @@ def prepare_dataset(no_imgs=-1):
             f_test_dataset.flush()
             c_test += 1
     f_test_dataset.close()
-    with open( "encoded_images.p", "wb" ) as pickle_f:
-        pickle.dump( encoded_images, pickle_f )  
+    with open("encoded_images.p", "wb") as pickle_f:
+        pickle.dump(encoded_images, pickle_f)
     return [c_train, c_test]
 
 

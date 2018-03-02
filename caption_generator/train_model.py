@@ -25,4 +25,4 @@ def train_model(weight=None, batch_size=32, epochs=10):
     print "Training complete...\n"
 
 if __name__ == '__main__':
-    train_model(epochs=50)
+    train_model(epochs=20)

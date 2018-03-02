@@ -59,7 +59,7 @@ class CaptionGenerator():
         print "Variables initialization done!"
 
 
-    def data_generator(self, batch_size = 32):
+    def data_generator(self, batch_size=32):
         partial_caps = []
         next_words = []
         images = []
@@ -97,7 +97,7 @@ class CaptionGenerator():
                         partial_caps = sequence.pad_sequences(partial_caps, maxlen=self.max_cap_len, padding='post')
                         total_count = 0
                         gen_count+=1
-                        print "yielding count: "+str(gen_count)
+                        # print "yielding count: "+str(gen_count)
                         yield [[images, partial_caps], next_words]
                         partial_caps = []
                         next_words = []

@@ -1,0 +1,16 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+    "settings": {
+        // ...
+        "python_interpreter": "/Users/cole-home/.virtualenvs/captions/bin/python3",
+
+        "python_package_paths": [
+            "/Users/cole-home/.virtualenvs/captions/lib/python3.6/site-packages"
+        ]
+    }
+}

@@ -107,7 +107,7 @@ def test_model_on_images(weight, img_dir, beam_size = 3):
 	return bleu_score(hypotheses, references)
 
 if __name__ == '__main__':
-	weight = 'weights-improvement-48.hdf5'
+	weight = 'weights-improvement-07.hdf5'
 	test_image = '3155451946_c0862c70cb.jpg'
 	test_img_dir = 'Flickr8k_text/Flickr_8k.testImages.txt'
 	#print test_model(weight, test_image)

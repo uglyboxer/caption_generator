@@ -7,10 +7,10 @@
 	],
     "settings": {
         // ...
-        "python_interpreter": "/Users/cole-home/.virtualenvs/captions/bin/python3",
+        "python_interpreter": "/Users/cole-home/.virtualenvs/cap2/bin/python",
 
         "python_package_paths": [
-            "/Users/cole-home/.virtualenvs/captions/lib/python3.6/site-packages"
+            "/Users/cole-home/.virtualenvs/cap2/lib/python2.7/site-packages"
         ]
     }
 }

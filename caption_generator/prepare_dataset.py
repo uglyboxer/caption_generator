@@ -26,8 +26,8 @@ def get_encoding(model, img):
     image = load_image('Flicker8k_Dataset/'+str(img))
     pred = model.predict(image)
     pred = np.reshape(pred, pred.shape[1])
-    print "Encoding image: " + str(counter)
-    print pred.shape
+    print("Encoding image: " + str(counter))
+    print(pred.shape)
     return pred
 
 
@@ -89,5 +89,5 @@ def prepare_dataset(no_imgs=-1):
 
 if __name__ == '__main__':
     c_train, c_test = prepare_dataset()
-    print "Training samples = " + str(c_train)
-    print "Test samples = " + str(c_test)
+    print("Training samples = " + str(c_train))
+    print("Test samples = " + str(c_test))

@@ -28,7 +28,7 @@ class CaptionGenerator(object):
         iter_ = df.iterrows()
         caps = []
         for i in range(nb_samples):
-            x = iter_.next()
+            x = next(iter_)
             caps.append(x[1][1])
 
         self.total_samples = 0
@@ -70,7 +70,7 @@ class CaptionGenerator(object):
         caps = []
         imgs = []
         for i in range(nb_samples):
-            x = iter_.next()
+            x = next(iter_)
             caps.append(x[1][1])
             imgs.append(x[1][0])
 

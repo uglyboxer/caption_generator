@@ -34,7 +34,7 @@ class CaptionGenerator(object):
         self.total_samples = 0
         for text in caps:
             self.total_samples += len(text.split()) - 1
-        print "Total samples : " + str(self.total_samples)
+        print("Total samples : " + str(self.total_samples))
         
         words = [txt.split() for txt in caps]
         unique = []
@@ -62,7 +62,7 @@ class CaptionGenerator(object):
         partial_caps = []
         next_words = []
         images = []
-        print "Generating data..."
+        print("Generating data...")
         gen_count = 0
         df = pd.read_csv('Flickr8k_text/flickr_8k_train_dataset.txt', delimiter='\t')
         nb_samples = df.shape[0]

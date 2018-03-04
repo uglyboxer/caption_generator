@@ -82,7 +82,7 @@ def prepare_dataset(no_imgs=-1):
             f_test_dataset.flush()
             c_test += 1
     f_test_dataset.close()
-    with open("encoded_images.p", "w") as pickle_f:
+    with open("encoded_images.p", "wb") as pickle_f:
         pickle.dump(encoded_images, pickle_f)
     return [c_train, c_test]
 

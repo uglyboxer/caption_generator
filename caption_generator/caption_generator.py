@@ -19,16 +19,16 @@ class CaptionGenerator(object):
         self.index_word = None
         self.word_index = None
         self.total_samples = None
-        self.encoded_images = pickle.load(open("encoded_images.p", "r"))
+        self.encoded_images = pickle.load(open("encoded_images.p", "rb"))
         self.variable_initializer()
 
     def variable_initializer(self):
         df = pd.read_csv('Flickr8k_text/flickr_8k_train_dataset.txt', delimiter='\t')
         nb_samples = df.shape[0]
-        iter = df.iterrows()
+        iter_ = df.iterrows()
         caps = []
         for i in range(nb_samples):
-            x = iter.next()
+            x = iter_.next()
             caps.append(x[1][1])
 
         self.total_samples = 0
@@ -92,7 +92,9 @@ class CaptionGenerator(object):
                     if total_count >= batch_size:
                         next_words = np.asarray(next_words)
                         images = np.asarray(images)
-                        partial_caps = sequence.pad_sequences(partial_caps, maxlen=self.max_cap_len, padding='post')
+                        partial_caps = sequence.pad_sequences(partial_caps,
+                                                              maxlen=self.max_cap_len,
+                                                              padding='post')
                         total_count = 0
                         gen_count += 1
                         # print "yielding count: "+str(gen_count)
@@ -107,11 +109,11 @@ class CaptionGenerator(object):
         return np.asarray(x)
 
     def create_model(self, ret_model=False):
-        #base_model = VGG16(weights='imagenet', include_top=False, input_shape = (224, 224, 3))
-        #base_model.trainable=False
+        # base_model = VGG16(weights='imagenet', include_top=False, input_shape = (224, 224, 3))
+        # base_model.trainable=False
         image_model = Sequential()
-        #image_model.add(base_model)
-        #image_model.add(Flatten())
+        # image_model.add(base_model)
+        # image_model.add(Flatten())
         image_model.add(Dense(EMBEDDING_DIM, input_dim=4096, activation='relu'))
 
         image_model.add(RepeatVector(self.max_cap_len))

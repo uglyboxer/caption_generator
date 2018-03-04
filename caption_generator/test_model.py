@@ -1,4 +1,3 @@
-# import cPickle as pickle
 import pickle
 
 import numpy as np
@@ -59,7 +58,7 @@ def generate_captions(model, image, beam_size):
 
 
 def test_model(weight, img_name, beam_size = 3):
-    encoded_images = pickle.load(open("encoded_images.p", "r"))
+    encoded_images = pickle.load(open("encoded_images.p", "rb"))
     model = cg.create_model(ret_model=True)
     model.load_weights(weight)
 
@@ -78,7 +77,7 @@ def test_model_on_images(weight, img_dir, beam_size=3):
     captions = {}
     with open(img_dir, 'r') as f_images:
         imgs = f_images.read().strip().split('\n')
-    encoded_images = pickle.load(open("encoded_images.p", "r"))
+    encoded_images = pickle.load(open("encoded_images.p", "rb"))
     model = cg.create_model(ret_model=True)
     model.load_weights(weight)
 

@@ -115,9 +115,7 @@ class CaptionGenerator(object):
         # image_model.add(base_model)
         # image_model.add(Flatten())
         # image_model.add(Dense(EMBEDDING_DIM, input_dim=4096, activation=None, trainable=False))
-        image_model.add(Embedding(4096, 4096, embeddings_initializer='ones', trainable=False))
-        # TODO Should this not be trainable?
-
+        image_model.add(Embedding(4096, 4096, embeddings_initializer='ones', input_length=1, trainable=False))
         image_model.add(RepeatVector(self.max_cap_len))
 
         lang_model = Sequential()

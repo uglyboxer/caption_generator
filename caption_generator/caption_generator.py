@@ -130,6 +130,7 @@ class CaptionGenerator(object):
 
 ####
         image_input = Input((4096, ))
+        image_model = Dense(EMBEDDING_DIM)(image_input)
         image_model = RepeatVector(self.max_cap_len)(image_input)
 
         lang_input = Input((self.max_cap_len, ))

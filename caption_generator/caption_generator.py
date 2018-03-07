@@ -2,8 +2,8 @@ from vgg16 import VGG16
 from keras.applications import inception_v3
 import numpy as np
 import pandas as pd
-from keras.models import Sequential
-from keras.layers import LSTM, Embedding, TimeDistributed, Dense, RepeatVector, Merge, Activation, Flatten
+from keras.models import Sequential, Model
+from keras.layers import LSTM, Embedding, TimeDistributed, Dense, RepeatVector, Merge, Activation, Flatten, Input, concatenate
 from keras.preprocessing import image, sequence
 from keras.callbacks import ModelCheckpoint
 import pickle
@@ -109,32 +109,52 @@ class CaptionGenerator(object):
         return np.asarray(x)
 
     def create_model(self, ret_model=False):
-        # base_model = VGG16(weights='imagenet', include_top=False, input_shape = (224, 224, 3))
-        # base_model.trainable=False
-        image_model = Sequential()
-        # image_model.add(base_model)
-        # image_model.add(Flatten())
-        image_model.add(Dense(EMBEDDING_DIM, input_dim=4096, kernel_initializer='ones', bias_initializer='ones', activation=None, trainable=False))
-        image_model.add(RepeatVector(self.max_cap_len))
+        # # base_model = VGG16(weights='imagenet', include_top=False, input_shape = (224, 224, 3))
+        # # base_model.trainable=False
+        # image_model = Sequential()
+        # # image_model.add(base_model)
+        # # image_model.add(Flatten())
+        # image_model.add(Dense(EMBEDDING_DIM, input_dim=4096, kernel_initializer='ones', bias_initializer='ones', activation=None, trainable=False))
+        # image_model.add(RepeatVector(self.max_cap_len))
 
-        lang_model = Sequential()
-        lang_model.add(Embedding(self.vocab_size, 256, input_length=self.max_cap_len))
-        lang_model.add(LSTM(256,return_sequences=True))
-        lang_model.add(TimeDistributed(Dense(EMBEDDING_DIM)))
+        # lang_model = Sequential()
+        # lang_model.add(Embedding(self.vocab_size, 256, input_length=self.max_cap_len))
+        # lang_model.add(LSTM(256,return_sequences=True))
+        # lang_model.add(TimeDistributed(Dense(EMBEDDING_DIM)))
 
-        model = Sequential()
-        model.add(Merge([image_model, lang_model], mode='concat'))
-        model.add(LSTM(1000, return_sequences=False))
-        model.add(Dense(self.vocab_size))
-        model.add(Activation('softmax'))
+        # model = Sequential()
+        # model.add(Merge([image_model, lang_model], mode='concat'))
+        # model.add(LSTM(1000, return_sequences=False))
+        # model.add(Dense(self.vocab_size))
+        # model.add(Activation('softmax'))
+
+####
+        image_input = Input((4096, ))
+        image_model = RepeatVector(self.max_cap_len)(image_input)
+
+        lang_input = Input((self.max_cap_len))
+        lang_model = Embedding(self.max_cap_len, EMBEDDING_DIM)(lang_input)
+        lang_model = LSTM(1000, return_sequencs=True)(lang_model)
+        lang_model = TimeDistributed(Dense(EMBEDDING_DIM))(lang_model)
+
+        model = concatenate([image_model, lang_model])
+        modal = LSTM(1000, return_sequences=False)(model)
+        model = Dense(self.vocab_size, activation='softmax')(model)
+
+        m = Model(inputs=[image_input, lang_input], outputs=model)
+
+####
 
         print("Model created!")
 
         if ret_model:
-            return model
+            # return model
+            return m
 
-        model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-        return model
+        # model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+        m.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+        # return model
+        return m
 
     def get_word(self, index):
         return self.index_word[index]

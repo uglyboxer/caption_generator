@@ -3,7 +3,7 @@ from keras.applications import inception_v3
 import numpy as np
 import pandas as pd
 from keras.models import Sequential, Model
-from keras.layers import LSTM, Embedding, TimeDistributed, Dense, RepeatVector, Merge, Activation, Flatten, Input, concatenate
+from keras.layers import LSTM, Embedding, TimeDistributed, Dense, RepeatVector, Merge, Activation, Flatten, Input, concatenate, CuDNNLSTM
 from keras.preprocessing import image, sequence
 from keras.callbacks import ModelCheckpoint
 import pickle
@@ -86,7 +86,7 @@ class CaptionGenerator(object):
                     partial_caps.append(partial)
                     next_ = np.zeros(self.vocab_size)
                     next_[self.word_index[text.split()[i + 1]]] = 1
-                    next_words.append(next)
+                    next_words.append(next_)
                     images.append(current_image)
 
                     if total_count >= batch_size:
@@ -132,13 +132,13 @@ class CaptionGenerator(object):
         image_input = Input((4096, ))
         image_model = RepeatVector(self.max_cap_len)(image_input)
 
-        lang_input = Input((self.max_cap_len))
-        lang_model = Embedding(self.max_cap_len, EMBEDDING_DIM)(lang_input)
-        lang_model = LSTM(1000, return_sequencs=True)(lang_model)
+        lang_input = Input((self.max_cap_len, ))
+        lang_model = Embedding(self.vocab_size, 256, input_length=self.max_cap_len)(lang_input)
+        lang_model = CuDNNLSTM(256, return_sequences=True)(lang_model)
         lang_model = TimeDistributed(Dense(EMBEDDING_DIM))(lang_model)
 
         model = concatenate([image_model, lang_model])
-        modal = LSTM(1000, return_sequences=False)(model)
+        model = CuDNNLSTM(1000, return_sequences=False)(model)
         model = Dense(self.vocab_size, activation='softmax')(model)
 
         m = Model(inputs=[image_input, lang_input], outputs=model)

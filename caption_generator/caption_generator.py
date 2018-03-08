@@ -1,4 +1,4 @@
-from vgg16 import VGG16
+from caption_generator.vgg16 import VGG16
 from keras.applications import inception_v3
 import numpy as np
 import pandas as pd
@@ -99,6 +99,8 @@ class CaptionGenerator(object):
                         gen_count += 1
                         # print "yielding count: "+str(gen_count)
                         yield [[images, partial_caps], next_words]
+                        if image_counter % 100 == 0:
+                            print(next_words)
                         partial_caps = []
                         next_words = []
                         images = []
@@ -109,12 +111,12 @@ class CaptionGenerator(object):
         return np.asarray(x)
 
     def create_model(self, ret_model=False):
-        # # base_model = VGG16(weights='imagenet', include_top=False, input_shape = (224, 224, 3))
-        # # base_model.trainable=False
+        # base_model = VGG16(weights='imagenet', include_top=False, input_shape = (224, 224, 3))
+        # base_model.trainable=False
         # image_model = Sequential()
         # # image_model.add(base_model)
         # # image_model.add(Flatten())
-        # image_model.add(Dense(EMBEDDING_DIM, input_dim=4096, kernel_initializer='ones', bias_initializer='ones', activation=None, trainable=False))
+        # image_model.add(Dense(EMBEDDING_DIM, input_dim=4096))
         # image_model.add(RepeatVector(self.max_cap_len))
 
         # lang_model = Sequential()

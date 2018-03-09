@@ -1,4 +1,4 @@
-from caption_generator.vgg16 import VGG16
+from vgg16 import VGG16
 from keras.applications import inception_v3
 import numpy as np
 import pandas as pd
@@ -99,8 +99,10 @@ class CaptionGenerator(object):
                         gen_count += 1
                         # print "yielding count: "+str(gen_count)
                         yield [[images, partial_caps], next_words]
-                        if image_counter % 100 == 0:
-                            print(next_words)
+                        if image_counter % 10 == 0:
+                            print(next_words[31])
+                            print(images[31])
+                            print(images[30])
                         partial_caps = []
                         next_words = []
                         images = []
